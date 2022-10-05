@@ -20,13 +20,11 @@ public class BorrowerController {
 
     private BorrowerServiceImpl borrowerService;
     private CreditServiceImpl creditService;
-    private KafkaTemplate<String, String> kafkaTemplate;
 
     @Autowired
-    BorrowerController(BorrowerServiceImpl borrowerService, CreditServiceImpl creditService,KafkaTemplate<String,String> kafkaTemplate) {
+    BorrowerController(BorrowerServiceImpl borrowerService, CreditServiceImpl creditService) {
         this.borrowerService = borrowerService;
         this.creditService = creditService;
-        this.kafkaTemplate = kafkaTemplate;
     }
 
     @PostMapping("/register")
@@ -36,13 +34,7 @@ public class BorrowerController {
 
     @PostMapping("/takeCredit")
     public ResponseEntity<Mono<Boolean>> takeCredit(@RequestBody Credit credit) {
-        kafkaTemplate.send("CREDIT_APPROVE",credit.toString());
         return ResponseEntity.ok(creditService.takeCredit(credit));
-    }
-
-    @KafkaListener(topics = "CREDIT_APPROVE", groupId = "foo")
-    public void listenGroupFoo(String message) {
-        System.out.println("Received Message in group foo: " + message);
     }
 
 
