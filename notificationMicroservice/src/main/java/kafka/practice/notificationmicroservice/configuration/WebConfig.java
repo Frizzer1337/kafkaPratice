@@ -1,4 +1,4 @@
-package kafka.pratice.notificationmicroservice.configuration;
+package kafka.practice.notificationmicroservice.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;

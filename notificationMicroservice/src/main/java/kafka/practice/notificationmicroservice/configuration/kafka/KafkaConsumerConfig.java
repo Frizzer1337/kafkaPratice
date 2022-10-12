@@ -1,6 +1,7 @@
-package kafka.practice.approvemicroservice.configuration.kafka;
+package kafka.practice.notificationmicroservice.configuration.kafka;
 
 import kafka.practice.api.entity.Credit;
+import kafka.practice.api.entity.CreditCheckEvent;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +23,7 @@ public class KafkaConsumerConfig {
     private ReceiverOptions<String, Credit> receiverOptions;
     @Value(value = "${kafka.bootstrapAddress}")
     private String bootstrapAddress;
-    @Value(value = "${group.approve.id}")
+    @Value(value = "${group.id}")
     private String groupId;
     @Value(value = "${topic.approve}")
     private String topic;
@@ -36,7 +37,7 @@ public class KafkaConsumerConfig {
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         receiverOptions = ReceiverOptions.create(props);
-        var deserializer = new JsonDeserializer<>(Credit.class,false);
+        var deserializer = new JsonDeserializer<>(Credit.class);
         deserializer.addTrustedPackages("kafka.practice.*");
         receiverOptions = receiverOptions.withValueDeserializer(deserializer);
         receiverOptions = receiverOptions.subscription(Collections.singleton(topic));

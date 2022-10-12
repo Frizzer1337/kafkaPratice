@@ -1,6 +1,6 @@
 package kafka.practice.borrowermicroservice.repository;
 
-import kafka.practice.borrowermicroservice.entity.Credit;
+import kafka.practice.api.entity.Credit;
 import reactor.core.publisher.Mono;
 
 public interface CreditRepository {

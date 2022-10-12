@@ -1,4 +1,4 @@
-package kafka.pratice.notificationmicroservice;
+package kafka.practice.notificationmicroservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,6 +1,6 @@
 package kafka.practice.approvemicroservice.repository;
 
-import kafka.practice.approvemicroservice.entity.Borrower;
+import kafka.practice.api.entity.Borrower;
 import reactor.core.publisher.Mono;
 
 public interface BorrowerRepository {

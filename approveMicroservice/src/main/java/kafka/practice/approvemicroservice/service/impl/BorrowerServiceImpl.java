@@ -1,8 +1,8 @@
 package kafka.practice.approvemicroservice.service.impl;
 
-import kafka.practice.approvemicroservice.entity.Borrower;
 import kafka.practice.approvemicroservice.repository.BorrowerRepository;
 import kafka.practice.approvemicroservice.service.BorrowerService;
+import kafka.practice.api.entity.Borrower;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 

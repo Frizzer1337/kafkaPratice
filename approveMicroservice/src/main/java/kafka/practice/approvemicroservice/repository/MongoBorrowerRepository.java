@@ -1,7 +1,8 @@
 package kafka.practice.approvemicroservice.repository;
 
+
 import com.mongodb.reactivestreams.client.MongoCollection;
-import kafka.practice.approvemicroservice.entity.Borrower;
+import kafka.practice.api.entity.Borrower;
 import reactor.core.publisher.Mono;
 
 import static com.mongodb.client.model.Filters.eq;

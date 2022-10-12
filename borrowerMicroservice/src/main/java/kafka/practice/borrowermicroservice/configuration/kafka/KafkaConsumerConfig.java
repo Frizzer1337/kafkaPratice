@@ -40,7 +40,7 @@ public class KafkaConsumerConfig {
                 JsonDeserializer.class);
         var deserializer = new JsonDeserializer<>();
         deserializer.addTrustedPackages("kafka.practice.*");
-        return new DefaultKafkaConsumerFactory<>(props,new StringDeserializer(),deserializer);
+        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), deserializer);
     }
 
     @Bean

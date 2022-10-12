@@ -1,8 +1,8 @@
 package kafka.practice.approvemicroservice.configuration;
 
-import kafka.practice.approvemicroservice.entity.Borrower;
 import kafka.practice.approvemicroservice.repository.BorrowerRepository;
 import kafka.practice.approvemicroservice.repository.MongoBorrowerRepository;
+import kafka.practice.api.entity.Borrower;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

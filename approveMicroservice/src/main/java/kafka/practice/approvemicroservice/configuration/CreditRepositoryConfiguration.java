@@ -1,8 +1,8 @@
 package kafka.practice.approvemicroservice.configuration;
 
-import kafka.practice.approvemicroservice.entity.Credit;
 import kafka.practice.approvemicroservice.repository.CreditRepository;
 import kafka.practice.approvemicroservice.repository.MongoCreditRepository;
+import kafka.practice.api.entity.Credit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,7 +1,7 @@
 package kafka.practice.borrowermicroservice.repository;
 
 import com.mongodb.reactivestreams.client.MongoCollection;
-import kafka.practice.borrowermicroservice.entity.Borrower;
+import kafka.practice.api.entity.Borrower;
 import reactor.core.publisher.Mono;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -21,7 +21,7 @@ public class MongoBorrowerRepository implements BorrowerRepository {
     }
 
     public Mono<Borrower> findBorrowerById(String borrowerId) {
-        return Mono.from(collection.find(eq("_id",borrowerId)).first());
+        return Mono.from(collection.find(eq("_id", borrowerId)).first());
     }
 
 }

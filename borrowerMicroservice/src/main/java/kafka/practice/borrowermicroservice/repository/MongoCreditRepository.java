@@ -1,7 +1,7 @@
 package kafka.practice.borrowermicroservice.repository;
 
 import com.mongodb.reactivestreams.client.MongoCollection;
-import kafka.practice.borrowermicroservice.entity.Credit;
+import kafka.practice.api.entity.Credit;
 import reactor.core.publisher.Mono;
 
 public class MongoCreditRepository implements CreditRepository {
@@ -18,4 +18,5 @@ public class MongoCreditRepository implements CreditRepository {
                 .map(x -> true)
                 .defaultIfEmpty(false);
     }
+
 }

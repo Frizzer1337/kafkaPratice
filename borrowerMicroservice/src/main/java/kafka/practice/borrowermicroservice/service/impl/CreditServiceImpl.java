@@ -1,9 +1,11 @@
 package kafka.practice.borrowermicroservice.service.impl;
 
-import kafka.practice.borrowermicroservice.entity.Credit;
+import kafka.practice.api.entity.Credit;
 import kafka.practice.borrowermicroservice.repository.CreditRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -11,18 +13,21 @@ import reactor.core.publisher.Mono;
 public class CreditServiceImpl {
 
     private CreditRepository creditRepository;
-    private KafkaTemplate<String,Object> kafkaTemplate;
+    private ReactiveKafkaProducerTemplate<String, Credit> kafkaTemplate;
+    private final Logger log = LoggerFactory.getLogger(CreditServiceImpl.class);
 
 
     @Autowired
-    public CreditServiceImpl(CreditRepository creditRepository,KafkaTemplate<String, Object> kafkaTemplate) {
+    public CreditServiceImpl(CreditRepository creditRepository, ReactiveKafkaProducerTemplate<String, Credit> kafkaTemplate) {
         this.creditRepository = creditRepository;
         this.kafkaTemplate = kafkaTemplate;
     }
 
     public Mono<Boolean> takeCredit(Credit credit) {
         return creditRepository.save(credit).flatMap(x ->
-                Mono.just(kafkaTemplate.send("CREDIT_APPROVE", credit))
+                kafkaTemplate.send("CREDIT_APPROVE", credit)
+                        .doOnSuccess(result ->
+                                log.info("sent {} offset: {}", credit, result.recordMetadata().offset()))
                         .thenReturn(x)
         );
     }

@@ -1,7 +1,7 @@
 package kafka.practice.borrowermicroservice.controller;
 
-import kafka.practice.borrowermicroservice.entity.Borrower;
-import kafka.practice.borrowermicroservice.entity.Credit;
+import kafka.practice.api.entity.Borrower;
+import kafka.practice.api.entity.Credit;
 import kafka.practice.borrowermicroservice.service.impl.BorrowerServiceImpl;
 import kafka.practice.borrowermicroservice.service.impl.CreditServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

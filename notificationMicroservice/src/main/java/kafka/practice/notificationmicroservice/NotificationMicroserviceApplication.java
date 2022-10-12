@@ -1,4 +1,4 @@
-package kafka.pratice.notificationmicroservice;
+package kafka.practice.notificationmicroservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

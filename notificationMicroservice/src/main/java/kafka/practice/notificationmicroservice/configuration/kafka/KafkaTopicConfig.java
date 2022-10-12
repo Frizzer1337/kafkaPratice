@@ -1,4 +1,4 @@
-package kafka.pratice.notificationmicroservice.configuration.kafka;
+package kafka.practice.notificationmicroservice.configuration.kafka;
 
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.springframework.beans.factory.annotation.Value;
