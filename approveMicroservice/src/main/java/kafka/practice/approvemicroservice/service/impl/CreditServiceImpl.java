@@ -40,7 +40,7 @@ public class CreditServiceImpl {
                         x-> borrowerService.findBorrowerById(x.value().getBorrowerId())
                             .flatMap(borrower -> approve(x.value(), borrower))
                 )
-                .flatMap( credit -> kafkaTemplate.send("CREDIT_APPROVE", new CreditCheckEvent(credit))
+                .flatMap( credit -> kafkaTemplate.send("CREDIT_CHECKED", new CreditCheckEvent(credit))
                             .doOnSuccess(result ->
                                     log.info("sent {} offset: {}",credit,result.recordMetadata().offset()))
                             .thenReturn(credit)

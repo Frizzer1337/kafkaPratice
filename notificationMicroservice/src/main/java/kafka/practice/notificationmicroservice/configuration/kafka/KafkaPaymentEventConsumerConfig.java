@@ -1,7 +1,6 @@
 package kafka.practice.notificationmicroservice.configuration.kafka;
 
-import kafka.practice.api.entity.Credit;
-import kafka.practice.api.entity.CreditCheckEvent;
+import kafka.practice.api.entity.PaymentEvent;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,18 +18,18 @@ import java.util.Map;
 
 @Configuration
 @EnableKafka
-public class KafkaEventConsumerConfig {
+public class KafkaPaymentEventConsumerConfig {
 
-    private ReceiverOptions<String, CreditCheckEvent> receiverOptions;
+    private ReceiverOptions<String, PaymentEvent> receiverOptions;
     @Value(value = "${kafka.bootstrapAddress}")
     private String bootstrapAddress;
-    @Value(value = "${group.event.id}")
+    @Value(value = "${group.payment.id}")
     private String groupId;
-    @Value(value = "${topic.check}")
+    @Value(value = "${topic.payment}")
     private String topic;
 
     @Bean
-    public KafkaReceiver<String, CreditCheckEvent> kafkaEventConsumerFactoryTemplate() {
+    public KafkaReceiver<String, PaymentEvent> kafkaPaymentEventConsumerFactoryTemplate() {
 
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
@@ -38,7 +37,7 @@ public class KafkaEventConsumerConfig {
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         receiverOptions = ReceiverOptions.create(props);
-        var deserializer = new JsonDeserializer<>(CreditCheckEvent.class);
+        var deserializer = new JsonDeserializer<>(PaymentEvent.class);
         receiverOptions = receiverOptions.withValueDeserializer(deserializer);
         receiverOptions = receiverOptions.subscription(Collections.singleton(topic));
         return KafkaReceiver.create(receiverOptions);

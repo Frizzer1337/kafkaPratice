@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.reactive.ReactiveKafkaConsumerTemplate;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
+import reactor.kafka.receiver.KafkaReceiver;
 import reactor.kafka.receiver.ReceiverOptions;
 
 import java.util.Collections;
@@ -29,7 +30,7 @@ public class KafkaConsumerConfig {
     private String topic;
 
     @Bean
-    public ReactiveKafkaConsumerTemplate<String, Credit> kafkaConsumerFactoryTemplate() {
+    public KafkaReceiver<String, Credit> kafkaConsumerFactoryTemplate() {
 
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
@@ -38,9 +39,8 @@ public class KafkaConsumerConfig {
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         receiverOptions = ReceiverOptions.create(props);
         var deserializer = new JsonDeserializer<>(Credit.class);
-        deserializer.addTrustedPackages("kafka.practice.*");
         receiverOptions = receiverOptions.withValueDeserializer(deserializer);
         receiverOptions = receiverOptions.subscription(Collections.singleton(topic));
-        return new ReactiveKafkaConsumerTemplate<>(receiverOptions);
+        return KafkaReceiver.create(receiverOptions);
     }
 }

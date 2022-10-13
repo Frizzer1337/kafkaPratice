@@ -1,6 +1,5 @@
-package kafka.practice.notificationmicroservice.configuration.kafka;
+package kafka.practice.paymentmicroservice.configuration.kafka;
 
-import kafka.practice.api.entity.Credit;
 import kafka.practice.api.entity.CreditCheckEvent;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -10,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.reactive.ReactiveKafkaConsumerTemplate;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
-import reactor.kafka.receiver.KafkaReceiver;
 import reactor.kafka.receiver.ReceiverOptions;
 
 import java.util.Collections;
@@ -19,18 +17,18 @@ import java.util.Map;
 
 @Configuration
 @EnableKafka
-public class KafkaEventConsumerConfig {
+public class KafkaPaymentEventConsumerConfig {
 
     private ReceiverOptions<String, CreditCheckEvent> receiverOptions;
     @Value(value = "${kafka.bootstrapAddress}")
     private String bootstrapAddress;
-    @Value(value = "${group.event.id}")
+    @Value(value = "${group.id}")
     private String groupId;
-    @Value(value = "${topic.check}")
+    @Value(value = "${topic.approve}")
     private String topic;
 
     @Bean
-    public KafkaReceiver<String, CreditCheckEvent> kafkaEventConsumerFactoryTemplate() {
+    public ReactiveKafkaConsumerTemplate<String, CreditCheckEvent> kafkaPaymentEventConsumerFactoryTemplate() {
 
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
@@ -41,6 +39,6 @@ public class KafkaEventConsumerConfig {
         var deserializer = new JsonDeserializer<>(CreditCheckEvent.class);
         receiverOptions = receiverOptions.withValueDeserializer(deserializer);
         receiverOptions = receiverOptions.subscription(Collections.singleton(topic));
-        return KafkaReceiver.create(receiverOptions);
+        return new ReactiveKafkaConsumerTemplate<>(receiverOptions);
     }
 }
