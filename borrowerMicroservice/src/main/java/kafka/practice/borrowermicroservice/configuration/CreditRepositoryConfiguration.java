@@ -10,15 +10,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CreditRepositoryConfiguration {
 
-    private BorrowerMongoConfiguration borrowerMongoConfiguration;
+  private BorrowerMongoConfiguration borrowerMongoConfiguration;
 
-    @Autowired
-    public CreditRepositoryConfiguration(BorrowerMongoConfiguration borrowerMongoConfiguration) {
-        this.borrowerMongoConfiguration = borrowerMongoConfiguration;
-    }
+  @Autowired
+  public CreditRepositoryConfiguration(BorrowerMongoConfiguration borrowerMongoConfiguration) {
+    this.borrowerMongoConfiguration = borrowerMongoConfiguration;
+  }
 
-    @Bean
-    public CreditRepository creditRepository() {
-        return new MongoCreditRepository(borrowerMongoConfiguration.database().getCollection("credit", Credit.class));
-    }
+  @Bean
+  public CreditRepository creditRepository() {
+    return new MongoCreditRepository(
+        borrowerMongoConfiguration.database().getCollection("credit", Credit.class));
+  }
 }

@@ -15,14 +15,14 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 @Configuration
 public class BorrowerMongoConfiguration {
 
-    @Bean
-    public MongoDatabase database() {
-        MongoClient mongo = MongoClients.create();
-        CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
-                fromProviders(PojoCodecProvider.builder().automatic(true).build()));
+  @Bean
+  public MongoDatabase database() {
+    MongoClient mongo = MongoClients.create();
+    CodecRegistry pojoCodecRegistry =
+        fromRegistries(
+            MongoClientSettings.getDefaultCodecRegistry(),
+            fromProviders(PojoCodecProvider.builder().automatic(true).build()));
 
-        return mongo.getDatabase("creditProject").withCodecRegistry(pojoCodecRegistry);
-
-    }
-
+    return mongo.getDatabase("creditProject").withCodecRegistry(pojoCodecRegistry);
+  }
 }

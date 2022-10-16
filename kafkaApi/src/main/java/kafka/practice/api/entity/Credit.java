@@ -2,98 +2,126 @@ package kafka.practice.api.entity;
 
 public class Credit {
 
-    private String id;
-    private String returnDate;
-    private int creditBalance;
-    private String borrowerId;
-    private int creditType;
-    private CreditStatus creditStatus;
+  private String id;
+  private String deadlineDate;
+  private String lastPaymentDate;
+  private int creditBalance;
+  private int penalty;
+  private String borrowerId;
+  private int creditType;
+  private CreditStatus creditStatus;
 
-    public String getId() {
-        return id;
-    }
+  public String getId() {
+    return id;
+  }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    public CreditStatus getCreditStatus() {
-        return creditStatus;
-    }
+  public int getPenalty() {
+    return penalty;
+  }
 
-    public void setCreditStatus(CreditStatus creditStatus) {
-        this.creditStatus = creditStatus;
-    }
+  public void setPenalty(int penalty) {
+    this.penalty = penalty;
+  }
 
-    public String getReturnDate() {
-        return returnDate;
-    }
+  public CreditStatus getCreditStatus() {
+    return creditStatus;
+  }
 
-    public void setReturnDate(String returnDate) {
-        this.returnDate = returnDate;
-    }
+  public void setCreditStatus(CreditStatus creditStatus) {
+    this.creditStatus = creditStatus;
+  }
 
-    public int getCreditBalance() {
-        return creditBalance;
-    }
+  public int getCreditBalance() {
+    return creditBalance;
+  }
 
-    public void setCreditBalance(int creditBalance) {
-        this.creditBalance = creditBalance;
-    }
+  public void setCreditBalance(int creditBalance) {
+    this.creditBalance = creditBalance;
+  }
 
-    public String getBorrowerId() {
-        return borrowerId;
-    }
+  public String getBorrowerId() {
+    return borrowerId;
+  }
 
-    public void setBorrowerId(String borrowerId) {
-        this.borrowerId = borrowerId;
-    }
+  public void setBorrowerId(String borrowerId) {
+    this.borrowerId = borrowerId;
+  }
 
-    public int getCreditType() {
-        return creditType;
-    }
+  public int getCreditType() {
+    return creditType;
+  }
 
-    public void setCreditType(int creditType) {
-        this.creditType = creditType;
-    }
+  public void setCreditType(int creditType) {
+    this.creditType = creditType;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+  public String getDeadlineDate() {
+    return deadlineDate;
+  }
 
-        Credit credit = (Credit) o;
+  public void setDeadlineDate(String deadlineDate) {
+    this.deadlineDate = deadlineDate;
+  }
 
-        if (!id.equals(credit.id)) return false;
-        if (creditBalance != credit.creditBalance) return false;
-        if (creditType != credit.creditType) return false;
-        if (returnDate != null ? !returnDate.equals(credit.returnDate) : credit.returnDate != null) return false;
-        if (!borrowerId.equals(credit.borrowerId)) return false;
-        return creditStatus == credit.creditStatus;
-    }
+  public String getLastPaymentDate() {
+    return lastPaymentDate;
+  }
 
-    @Override
-    public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + (returnDate != null ? returnDate.hashCode() : 0);
-        result = 31 * result + creditBalance;
-        result = 31 * result + borrowerId.hashCode();
-        result = 31 * result + creditType;
-        result = 31 * result + (creditStatus != null ? creditStatus.hashCode() : 0);
-        return result;
-    }
+  public void setLastPaymentDate(String lastPaymentDate) {
+    this.lastPaymentDate = lastPaymentDate;
+  }
 
-    @Override
-    public String toString() {
-        return "Credit{" +
-                "id=" + id +
-                ", returnDate=" + returnDate +
-                ", creditBalance=" + creditBalance +
-                ", borrowerId=" + borrowerId +
-                ", creditType=" + creditType +
-                ", creditStatus=" + creditStatus +
-                '}';
-    }
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
 
+    Credit credit = (Credit) o;
 
+    if (creditBalance != credit.creditBalance) return false;
+    if (penalty != credit.penalty) return false;
+    if (creditType != credit.creditType) return false;
+    if (!id.equals(credit.id)) return false;
+    if (!deadlineDate.equals(credit.deadlineDate)) return false;
+    if (!lastPaymentDate.equals(credit.lastPaymentDate)) return false;
+    if (!borrowerId.equals(credit.borrowerId)) return false;
+    return creditStatus == credit.creditStatus;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = id.hashCode();
+    result = 31 * result + deadlineDate.hashCode();
+    result = 31 * result + lastPaymentDate.hashCode();
+    result = 31 * result + creditBalance;
+    result = 31 * result + penalty;
+    result = 31 * result + borrowerId.hashCode();
+    result = 31 * result + creditType;
+    result = 31 * result + creditStatus.hashCode();
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "Credit{"
+        + "id="
+        + id
+        + ", deadline="
+        + deadlineDate
+        + ", lastPayment="
+        + lastPaymentDate
+        + ", creditBalance="
+        + creditBalance
+        + ", borrowerId="
+        + borrowerId
+        + ", creditType="
+        + creditType
+        + ", creditStatus="
+        + creditStatus
+        + '}';
+  }
 }

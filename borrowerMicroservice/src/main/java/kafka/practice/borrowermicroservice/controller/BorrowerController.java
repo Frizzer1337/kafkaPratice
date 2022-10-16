@@ -16,24 +16,22 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/borrower")
 public class BorrowerController {
 
-    private BorrowerServiceImpl borrowerService;
-    private CreditServiceImpl creditService;
+  private BorrowerServiceImpl borrowerService;
+  private CreditServiceImpl creditService;
 
-    @Autowired
-    BorrowerController(BorrowerServiceImpl borrowerService, CreditServiceImpl creditService) {
-        this.borrowerService = borrowerService;
-        this.creditService = creditService;
-    }
+  @Autowired
+  BorrowerController(BorrowerServiceImpl borrowerService, CreditServiceImpl creditService) {
+    this.borrowerService = borrowerService;
+    this.creditService = creditService;
+  }
 
-    @PostMapping("/register")
-    public ResponseEntity<Mono<Boolean>> register(@RequestBody Borrower borrower) {
-        return ResponseEntity.ok(borrowerService.register(borrower));
-    }
+  @PostMapping("/register")
+  public ResponseEntity<Mono<Boolean>> register(@RequestBody Borrower borrower) {
+    return ResponseEntity.ok(borrowerService.register(borrower));
+  }
 
-    @PostMapping("/takeCredit")
-    public ResponseEntity<Mono<Boolean>> takeCredit(@RequestBody Credit credit) {
-        return ResponseEntity.ok(creditService.takeCredit(credit));
-    }
-
-
+  @PostMapping("/takeCredit")
+  public ResponseEntity<Mono<Boolean>> takeCredit(@RequestBody Credit credit) {
+    return ResponseEntity.ok(creditService.takeCredit(credit));
+  }
 }

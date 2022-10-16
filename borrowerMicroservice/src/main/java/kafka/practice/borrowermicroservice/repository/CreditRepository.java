@@ -5,6 +5,5 @@ import reactor.core.publisher.Mono;
 
 public interface CreditRepository {
 
-    public Mono<Boolean> save(Credit credit);
-
+  public Mono<Boolean> save(Credit credit);
 }

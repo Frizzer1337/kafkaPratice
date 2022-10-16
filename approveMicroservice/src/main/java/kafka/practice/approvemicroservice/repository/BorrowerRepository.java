@@ -5,8 +5,7 @@ import reactor.core.publisher.Mono;
 
 public interface BorrowerRepository {
 
-    public Mono<Boolean> save(Borrower borrower);
+  public Mono<Boolean> save(Borrower borrower);
 
-    public Mono<Borrower> findBorrowerById(String borrowerId);
-
+  public Mono<Borrower> findBorrowerById(String borrowerId);
 }

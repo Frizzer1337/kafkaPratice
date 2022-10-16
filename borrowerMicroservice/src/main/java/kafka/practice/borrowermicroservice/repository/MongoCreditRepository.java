@@ -6,17 +6,14 @@ import reactor.core.publisher.Mono;
 
 public class MongoCreditRepository implements CreditRepository {
 
-    MongoCollection<Credit> collection;
+  MongoCollection<Credit> collection;
 
-    public MongoCreditRepository(MongoCollection<Credit> collection) {
-        this.collection = collection;
-    }
+  public MongoCreditRepository(MongoCollection<Credit> collection) {
+    this.collection = collection;
+  }
 
-    @Override
-    public Mono<Boolean> save(Credit credit) {
-        return Mono.from(collection.insertOne(credit))
-                .map(x -> true)
-                .defaultIfEmpty(false);
-    }
-
+  @Override
+  public Mono<Boolean> save(Credit credit) {
+    return Mono.from(collection.insertOne(credit)).map(x -> true).defaultIfEmpty(false);
+  }
 }

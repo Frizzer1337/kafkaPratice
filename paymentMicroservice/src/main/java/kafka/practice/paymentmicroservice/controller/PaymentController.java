@@ -1,9 +1,6 @@
 package kafka.practice.paymentmicroservice.controller;
 
-import kafka.practice.api.entity.Borrower;
-import kafka.practice.api.entity.Credit;
 import kafka.practice.api.entity.Payment;
-import kafka.practice.paymentmicroservice.service.impl.BorrowerServiceImpl;
 import kafka.practice.paymentmicroservice.service.impl.CreditServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,17 +14,15 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/payment")
 public class PaymentController {
 
-    private CreditServiceImpl creditService;
+  private CreditServiceImpl creditService;
 
-    @Autowired
-    PaymentController(CreditServiceImpl creditService) {
-        this.creditService = creditService;
-    }
+  @Autowired
+  PaymentController(CreditServiceImpl creditService) {
+    this.creditService = creditService;
+  }
 
-    @PostMapping("/pay")
-    public ResponseEntity<Mono<Boolean>> register(@RequestBody Payment payment) {
-        return ResponseEntity.ok(creditService.pay(payment));
-    }
-
-
+  @PostMapping("/pay")
+  public ResponseEntity<Mono<Boolean>> register(@RequestBody Payment payment) {
+    return ResponseEntity.ok(creditService.payAndSavePayment(payment));
+  }
 }

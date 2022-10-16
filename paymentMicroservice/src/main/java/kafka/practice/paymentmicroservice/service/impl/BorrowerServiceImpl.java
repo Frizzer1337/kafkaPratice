@@ -9,16 +9,13 @@ import reactor.core.publisher.Mono;
 @Service
 public class BorrowerServiceImpl implements BorrowerService {
 
-    private BorrowerRepository borrowerRepository;
+  private BorrowerRepository borrowerRepository;
 
-    public BorrowerServiceImpl(BorrowerRepository borrowerRepository) {
-        this.borrowerRepository = borrowerRepository;
-    }
+  public BorrowerServiceImpl(BorrowerRepository borrowerRepository) {
+    this.borrowerRepository = borrowerRepository;
+  }
 
-    public Mono<Boolean> register(Borrower borrower) {
-        return borrowerRepository.save(borrower);
-    }
-
-
+  public Mono<Boolean> register(Borrower borrower) {
+    return borrowerRepository.save(borrower);
+  }
 }
-

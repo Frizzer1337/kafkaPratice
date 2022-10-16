@@ -19,27 +19,30 @@ import java.util.Map;
 @EnableKafka
 public class KafkaConsumerConfig {
 
-    private ReceiverOptions<String, Credit> receiverOptions;
-    @Value(value = "${kafka.bootstrapAddress}")
-    private String bootstrapAddress;
-    @Value(value = "${group.approve.id}")
-    private String groupId;
-    @Value(value = "${topic.approve}")
-    private String topic;
+  private ReceiverOptions<String, Credit> receiverOptions;
 
-    @Bean
-    public ReactiveKafkaConsumerTemplate<String, Credit> kafkaConsumerFactoryTemplate() {
+  @Value(value = "${kafka.bootstrapAddress}")
+  private String bootstrapAddress;
 
-        Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        receiverOptions = ReceiverOptions.create(props);
-        var deserializer = new JsonDeserializer<>(Credit.class,false);
-        deserializer.addTrustedPackages("kafka.practice.*");
-        receiverOptions = receiverOptions.withValueDeserializer(deserializer);
-        receiverOptions = receiverOptions.subscription(Collections.singleton(topic));
-        return new ReactiveKafkaConsumerTemplate<>(receiverOptions);
-    }
+  @Value(value = "${group.approve.id}")
+  private String groupId;
+
+  @Value(value = "${topic.approve}")
+  private String topic;
+
+  @Bean
+  public ReactiveKafkaConsumerTemplate<String, Credit> kafkaConsumerFactoryTemplate() {
+
+    Map<String, Object> props = new HashMap<>();
+    props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+    props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
+    props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+    props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+    receiverOptions = ReceiverOptions.create(props);
+    var deserializer = new JsonDeserializer<>(Credit.class, false);
+    deserializer.addTrustedPackages("kafka.practice.*");
+    receiverOptions = receiverOptions.withValueDeserializer(deserializer);
+    receiverOptions = receiverOptions.subscription(Collections.singleton(topic));
+    return new ReactiveKafkaConsumerTemplate<>(receiverOptions);
+  }
 }

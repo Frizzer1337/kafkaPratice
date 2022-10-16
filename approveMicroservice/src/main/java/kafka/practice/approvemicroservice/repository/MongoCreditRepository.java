@@ -12,23 +12,23 @@ import static com.mongodb.client.model.Updates.set;
 
 public class MongoCreditRepository implements CreditRepository {
 
-    MongoCollection<Credit> collection;
+  MongoCollection<Credit> collection;
 
-    public MongoCreditRepository(MongoCollection<Credit> collection) {
-        this.collection = collection;
-    }
+  public MongoCreditRepository(MongoCollection<Credit> collection) {
+    this.collection = collection;
+  }
 
-    @Override
-    public Mono<Boolean> save(Credit credit) {
-        return Mono.from(collection.insertOne(credit))
-                .map(x -> true)
-                .defaultIfEmpty(false);
-    }
+  @Override
+  public Mono<Boolean> save(Credit credit) {
+    return Mono.from(collection.insertOne(credit)).map(x -> true).defaultIfEmpty(false);
+  }
 
-    @Override
-    public Mono<Credit> changeStatus(Credit credit, CreditStatus creditStatus){
-        return Mono
-                .from(collection.findOneAndUpdate(eq("_id",credit.getId()),set("creditStatus",creditStatus)
-                        ,new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER)));
-    }
+  @Override
+  public Mono<Credit> changeStatus(Credit credit, CreditStatus creditStatus) {
+    return Mono.from(
+        collection.findOneAndUpdate(
+            eq("_id", credit.getId()),
+            set("creditStatus", creditStatus),
+            new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER)));
+  }
 }

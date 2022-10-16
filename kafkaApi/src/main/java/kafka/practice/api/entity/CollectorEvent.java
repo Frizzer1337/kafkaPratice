@@ -2,16 +2,16 @@ package kafka.practice.api.entity;
 
 import java.time.LocalDate;
 
-public class CreditCheckEvent {
+public class CollectorEvent {
 
   private String id;
   private CreditStatus creditStatus;
   private String timestamp;
 
-  public CreditCheckEvent() {}
+  public CollectorEvent() {}
   ;
 
-  public CreditCheckEvent(Credit credit) {
+  public CollectorEvent(Credit credit) {
     this.id = credit.getId();
     this.creditStatus = credit.getCreditStatus();
     this.timestamp = LocalDate.now().toString();
@@ -46,7 +46,7 @@ public class CreditCheckEvent {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
-    CreditCheckEvent that = (CreditCheckEvent) o;
+    CollectorEvent that = (CollectorEvent) o;
 
     if (!id.equals(that.id)) return false;
     if (creditStatus != that.creditStatus) return false;

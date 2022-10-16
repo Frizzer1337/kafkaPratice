@@ -1,6 +1,5 @@
 package kafka.practice.approvemicroservice.configuration.kafka;
 
-import kafka.practice.api.entity.Credit;
 import kafka.practice.api.entity.CreditCheckEvent;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -17,21 +16,15 @@ import java.util.Map;
 @Configuration
 public class KafkaEventProducerConfig {
 
-    @Value(value = "${kafka.bootstrapAddress}")
-    private String bootstrapAddress;
+  @Value(value = "${kafka.bootstrapAddress}")
+  private String bootstrapAddress;
 
-    @Bean
-    public ReactiveKafkaProducerTemplate<String, CreditCheckEvent> reactiveKafkaEventTemplate() {
-        Map<String, Object> props = new HashMap<>();
-        props.put(
-                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                bootstrapAddress);
-        props.put(
-                ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
-                StringSerializer.class);
-        props.put(
-                ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-                JsonSerializer.class);
-        return new ReactiveKafkaProducerTemplate<>(SenderOptions.create(props));
-    }
+  @Bean
+  public ReactiveKafkaProducerTemplate<String, CreditCheckEvent> reactiveKafkaEventTemplate() {
+    Map<String, Object> props = new HashMap<>();
+    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+    props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+    props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+    return new ReactiveKafkaProducerTemplate<>(SenderOptions.create(props));
+  }
 }
