@@ -1,5 +1,6 @@
 package kafka.practice.paymentmicroservice.service.impl;
 
+import kafka.practice.api.entity.CollectorCredit;
 import kafka.practice.api.entity.CollectorEvent;
 import kafka.practice.api.entity.Payment;
 import kafka.practice.api.entity.PaymentEvent;
@@ -19,6 +20,7 @@ public class CreditServiceImpl {
 
   private CreditRepository creditRepository;
   private PaymentServiceImpl paymentService;
+  private CollectorServiceImpl collectorService;
   private ReactiveKafkaProducerTemplate<String, PaymentEvent> kafkaTemplate;
   private ReactiveKafkaProducerTemplate<String, CollectorEvent> kafkaCollectorTemplate;
   private final Logger log = LoggerFactory.getLogger(CreditServiceImpl.class);
@@ -27,10 +29,12 @@ public class CreditServiceImpl {
   public CreditServiceImpl(
       CreditRepository creditRepository,
       PaymentServiceImpl paymentService,
+      CollectorServiceImpl collectorService,
       ReactiveKafkaProducerTemplate<String, PaymentEvent> kafkaTemplate,
       ReactiveKafkaProducerTemplate<String, CollectorEvent> kafkaCollectorTemplate) {
     this.creditRepository = creditRepository;
     this.paymentService = paymentService;
+    this.collectorService = collectorService;
     this.kafkaTemplate = kafkaTemplate;
     this.kafkaCollectorTemplate = kafkaCollectorTemplate;
   }
@@ -57,13 +61,12 @@ public class CreditServiceImpl {
   @Scheduled(fixedDelay = 10000)
   public Disposable sendPenalty() {
     log.info("Credit's were checked");
-    creditRepository.checkCreditToSendCollector().doOnNext(System.out::println).subscribe();
     return creditRepository.sendPenalty().subscribe();
   }
 
   @Scheduled(fixedDelay = 10000)
   public Disposable changeStatusForBigPenalty() {
-    return creditRepository.checkCreditToSendCollector().doOnNext(System.out::println).subscribe();
+    return creditRepository.checkCreditToSendCollector().subscribe();
   }
 
   @Scheduled(fixedDelay = 10000)
@@ -72,11 +75,17 @@ public class CreditServiceImpl {
         .findCreditToSendCollector()
         .flatMap(
             x ->
-                kafkaCollectorTemplate
-                    .send("CREDIT_TO_COLLECTOR", new CollectorEvent(x))
-                    .doOnNext(
-                        result ->
-                            log.info("sent {} offset: {}", x, result.recordMetadata().offset())))
+                collectorService
+                    .save(new CollectorCredit(x))
+                    .then(
+                        kafkaCollectorTemplate
+                            .send("CREDIT_TO_COLLECTOR", new CollectorEvent(x))
+                            .doOnNext(
+                                result ->
+                                    log.info(
+                                        "sent {} offset: {}",
+                                        x,
+                                        result.recordMetadata().offset()))))
         .then(creditRepository.markCreditSendToCollector())
         .subscribe();
   }
