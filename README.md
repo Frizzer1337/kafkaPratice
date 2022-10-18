@@ -11,8 +11,8 @@
 * Insomnia(from API requests)<br />
 
 
-### Структура проекта<br />
-## 1)Borrower microservice<br />
+## Структура проекта<br />
+# 1)Borrower microservice<br />
 Позволяет регистрировать заемщиков, брать кредиты, отправляет события в кафку о взятии кредита<br />
 <br />
 2)Approve microservice<br />
