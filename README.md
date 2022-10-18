@@ -2,17 +2,17 @@
 Проект банковской системы/Banking system project
 
 ### Стек технологий/Used technologies:<br />
-Java 17<br />
-Kafka(reactor),<br />
-Reactor,<br />
-MongoDB(reactivestreams),<br />
-Docker(for Kafka),<br />
-Spring boot,<br />
-Insomnia(from API requests)<br />
+* Java 17<br />
+* Kafka(reactor),<br />
+* Reactor,<br />
+* MongoDB(reactivestreams),<br />
+* Docker(for Kafka),<br />
+* Spring boot,<br />
+* Insomnia(from API requests)<br />
 
 
 ### Структура проекта<br />
-1)Borrower microservice<br />
+## 1)Borrower microservice<br />
 Позволяет регистрировать заемщиков, брать кредиты, отправляет события в кафку о взятии кредита<br />
 <br />
 2)Approve microservice<br />
