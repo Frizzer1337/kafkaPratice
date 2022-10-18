@@ -5,5 +5,5 @@ import reactor.core.publisher.Mono;
 
 public interface CollectorRepository {
 
-    public Mono<Boolean> save(Collector collector);
+  public Mono<Boolean> save(Collector collector);
 }

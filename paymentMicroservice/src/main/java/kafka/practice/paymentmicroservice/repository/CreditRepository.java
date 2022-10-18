@@ -8,17 +8,17 @@ import reactor.core.publisher.Mono;
 
 public interface CreditRepository {
 
-    Mono<Credit> pay(Payment payment);
+  Mono<Credit> pay(Payment payment);
 
-    Mono<Boolean> checkIfCreditPayed(Credit credit);
+  Mono<Boolean> checkIfCreditPayed(Credit credit);
 
-    Mono<Boolean> sendPenalty();
+  Mono<Boolean> sendPenalty();
 
-    Flux<UpdateResult> checkCreditToSendCollector();
+  Flux<UpdateResult> checkCreditToSendCollector();
 
-    Flux<Credit> findCreditToSendCollector();
+  Flux<Credit> findCreditToSendCollector();
 
-    Mono<Boolean> markCreditSendToCollector();
+  Mono<Boolean> markCreditSendToCollector();
 
-    Flux<Credit> checkCreditToWarn();
+  Flux<Credit> checkCreditToWarn();
 }

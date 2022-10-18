@@ -6,7 +6,6 @@ import org.bson.Document;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
@@ -68,6 +67,7 @@ public class MongoCollectorCreditRepository implements CollectorCreditRepository
                                 new Document(
                                     "$lt",
                                     Arrays.asList(
-                                        "$lastCallDate", LocalDateTime.now().minusDays(1).toString())))))))));
+                                        "$lastCallDate",
+                                        LocalDateTime.now().minusDays(1).toString())))))))));
   }
 }

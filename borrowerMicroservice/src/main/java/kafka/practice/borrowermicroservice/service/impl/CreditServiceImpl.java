@@ -2,6 +2,7 @@ package kafka.practice.borrowermicroservice.service.impl;
 
 import kafka.practice.api.entity.Credit;
 import kafka.practice.borrowermicroservice.repository.CreditRepository;
+import kafka.practice.borrowermicroservice.service.CreditService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 @Service
-public class CreditServiceImpl {
+public class CreditServiceImpl implements CreditService {
 
   private CreditRepository creditRepository;
   private ReactiveKafkaProducerTemplate<String, Credit> kafkaTemplate;
@@ -24,6 +25,7 @@ public class CreditServiceImpl {
     this.kafkaTemplate = kafkaTemplate;
   }
 
+  @Override
   public Mono<Boolean> takeCredit(Credit credit) {
     return creditRepository
         .save(credit)

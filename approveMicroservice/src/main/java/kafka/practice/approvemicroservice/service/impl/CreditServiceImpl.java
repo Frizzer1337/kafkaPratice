@@ -5,6 +5,7 @@ import kafka.practice.api.entity.Credit;
 import kafka.practice.api.entity.CreditCheckEvent;
 import kafka.practice.api.entity.CreditStatus;
 import kafka.practice.approvemicroservice.repository.CreditRepository;
+import kafka.practice.approvemicroservice.service.CreditService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
-public class CreditServiceImpl {
+public class CreditServiceImpl implements CreditService {
 
   private CreditRepository creditRepository;
   private ReactiveKafkaConsumerTemplate<String, Credit> kafkaConsumer;
@@ -37,6 +38,7 @@ public class CreditServiceImpl {
     this.kafkaTemplate = kafkaTemplate;
   }
 
+  @Override
   @EventListener(ApplicationStartedEvent.class)
   public Flux<Credit> kafkaReceiving() {
     return kafkaConsumer
@@ -57,6 +59,7 @@ public class CreditServiceImpl {
                     .thenReturn(credit));
   }
 
+  @Override
   public Mono<Credit> approve(Credit credit, Borrower borrower) {
     final double SOCIAL_CREDIT_MODIFIER = 1.5;
     final double SALARY_MODIFIER = 10;
@@ -72,6 +75,7 @@ public class CreditServiceImpl {
             });
   }
 
+  @Override
   public Mono<Credit> approveByCreditRate(double creditRate, Credit credit) {
     double approveRate = 120;
     double humanApproveRate = 100;

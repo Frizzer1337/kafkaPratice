@@ -1,3 +1,8 @@
 package kafka.practice.paymentmicroservice.service;
 
-public interface PaymentService {}
+import kafka.practice.api.entity.Payment;
+import reactor.core.publisher.Mono;
+
+public interface PaymentService {
+  Mono<Boolean> save(Payment payment);
+}

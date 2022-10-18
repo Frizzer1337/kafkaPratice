@@ -1,7 +1,6 @@
 package kafka.practice.collectormicroservice.controller;
 
 import kafka.practice.api.entity.Collector;
-import kafka.practice.api.entity.Payment;
 import kafka.practice.collectormicroservice.service.impl.CollectorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +14,9 @@ public class CollectorController {
   private CollectorServiceImpl collectorService;
 
   @Autowired
-  CollectorController( CollectorServiceImpl collectorService) {
+  CollectorController(CollectorServiceImpl collectorService) {
     this.collectorService = collectorService;
   }
-
-
 
   @PostMapping("/register")
   public ResponseEntity<Mono<Boolean>> register(@RequestBody Collector collector) {
@@ -27,8 +24,9 @@ public class CollectorController {
   }
 
   @PostMapping("/takeCreditInWork/{collectorCreditId}/{collectorId}")
-  public ResponseEntity<Mono<Boolean>> takeCreditInWork(@PathVariable("collectorCreditId") String collectorCreditId,@PathVariable("collectorId") String collectorId){
-    System.out.println(collectorCreditId + " " + collectorId);
-    return ResponseEntity.ok(collectorService.takeCreditInWork(collectorCreditId,collectorId));
+  public ResponseEntity<Mono<Boolean>> takeCreditInWork(
+      @PathVariable("collectorCreditId") String collectorCreditId,
+      @PathVariable("collectorId") String collectorId) {
+    return ResponseEntity.ok(collectorService.takeCreditInWork(collectorCreditId, collectorId));
   }
 }

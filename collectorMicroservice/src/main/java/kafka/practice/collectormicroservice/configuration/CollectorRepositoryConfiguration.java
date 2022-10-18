@@ -1,8 +1,6 @@
 package kafka.practice.collectormicroservice.configuration;
 
 import kafka.practice.api.entity.Collector;
-import kafka.practice.api.entity.CollectorCredit;
-import kafka.practice.collectormicroservice.repository.MongoCollectorCreditRepository;
 import kafka.practice.collectormicroservice.repository.MongoCollectorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

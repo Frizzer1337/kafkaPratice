@@ -2,6 +2,7 @@ package kafka.practice.paymentmicroservice.service.impl;
 
 import kafka.practice.api.entity.*;
 import kafka.practice.paymentmicroservice.repository.CreditRepository;
+import kafka.practice.paymentmicroservice.service.CreditService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import reactor.core.Disposable;
 import reactor.core.publisher.Mono;
 
 @Service
-public class CreditServiceImpl {
+public class CreditServiceImpl implements CreditService {
 
   private CreditRepository creditRepository;
   private PaymentServiceImpl paymentService;
@@ -39,6 +40,7 @@ public class CreditServiceImpl {
     this.kafkaCreditPayedTemplate = kafkaCreditPayedTemplate;
   }
 
+  @Override
   public Mono<Boolean> pay(Payment payment) {
     return creditRepository
         .pay(payment)
@@ -48,13 +50,13 @@ public class CreditServiceImpl {
                     .checkIfCreditPayed(x)
                     .flatMap(
                         creditPayed -> {
-                          if (creditPayed) {
+                          if (Boolean.TRUE.equals(creditPayed)) {
                             return kafkaCreditPayedTemplate
                                 .send("CREDIT_PAYED", new CreditPayedEvent(x))
                                 .doOnSuccess(
                                     result ->
                                         log.info(
-                                            "sent {} offset: {}",
+                                            "Credit payed event sent {} offset: {}",
                                             x,
                                             result.recordMetadata().offset()));
                           } else {
@@ -63,7 +65,7 @@ public class CreditServiceImpl {
                                 .doOnSuccess(
                                     result ->
                                         log.info(
-                                            "sent {} offset: {}",
+                                            "Credit payment event sent {} offset: {}",
                                             x,
                                             result.recordMetadata().offset()));
                           }
@@ -73,22 +75,26 @@ public class CreditServiceImpl {
   }
 
   @Transactional
+  @Override
   public Mono<Boolean> payAndSavePayment(Payment payment) {
     return paymentService.save(payment).then(pay(payment));
   }
 
   @Scheduled(fixedDelay = 10000)
+  @Override
   public Disposable sendPenalty() {
     log.info("Credit's were checked");
     return creditRepository.sendPenalty().subscribe();
   }
 
   @Scheduled(fixedDelay = 10000)
+  @Override
   public Disposable changeStatusForBigPenalty() {
     return creditRepository.checkCreditToSendCollector().subscribe();
   }
 
   @Scheduled(fixedDelay = 10000)
+  @Override
   public Disposable sendToCollectorsForBigPenalty() {
     return creditRepository
         .findCreditToSendCollector()
@@ -110,6 +116,7 @@ public class CreditServiceImpl {
   }
 
   @Scheduled(fixedDelay = 10000)
+  @Override
   public Disposable sendWarnForBigPenalty() {
     return creditRepository
         .checkCreditToWarn()

@@ -12,13 +12,16 @@ public class CollectorCreditRepositoryConfiguration {
   private BorrowerMongoConfiguration borrowerMongoConfiguration;
 
   @Autowired
-  public CollectorCreditRepositoryConfiguration(BorrowerMongoConfiguration borrowerMongoConfiguration) {
+  public CollectorCreditRepositoryConfiguration(
+      BorrowerMongoConfiguration borrowerMongoConfiguration) {
     this.borrowerMongoConfiguration = borrowerMongoConfiguration;
   }
 
   @Bean
   public MongoCollectorCreditRepository mongoCollectorCreditRepository() {
     return new MongoCollectorCreditRepository(
-        borrowerMongoConfiguration.database().getCollection("collectorCredit", CollectorCredit.class));
+        borrowerMongoConfiguration
+            .database()
+            .getCollection("collectorCredit", CollectorCredit.class));
   }
 }

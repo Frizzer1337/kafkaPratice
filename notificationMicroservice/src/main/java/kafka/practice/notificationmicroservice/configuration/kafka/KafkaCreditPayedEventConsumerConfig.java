@@ -1,6 +1,5 @@
 package kafka.practice.notificationmicroservice.configuration.kafka;
 
-import kafka.practice.api.entity.CollectorEvent;
 import kafka.practice.api.entity.CreditPayedEvent;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;

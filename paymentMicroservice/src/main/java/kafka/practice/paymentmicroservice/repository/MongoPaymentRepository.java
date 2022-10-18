@@ -4,10 +4,6 @@ import com.mongodb.reactivestreams.client.MongoCollection;
 import kafka.practice.api.entity.Payment;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDateTime;
-
-import static com.mongodb.client.model.Filters.gt;
-
 public class MongoPaymentRepository implements PaymentRepository {
 
   MongoCollection<Payment> collection;
@@ -18,10 +14,6 @@ public class MongoPaymentRepository implements PaymentRepository {
 
   @Override
   public Mono<Boolean> save(Payment payment) {
-    return Mono.from(collection.insertOne(payment))
-            .map(x -> true)
-            .defaultIfEmpty(false);
+    return Mono.from(collection.insertOne(payment)).map(x -> true).defaultIfEmpty(false);
   }
-
-
 }

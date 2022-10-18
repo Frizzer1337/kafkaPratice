@@ -1,6 +1,5 @@
 package kafka.practice.paymentmicroservice.configuration.kafka;
 
-import kafka.practice.api.entity.CollectorEvent;
 import kafka.practice.api.entity.CreditPayedEvent;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -21,7 +20,8 @@ public class KafkaPaymentEventProducerConfig {
   private String bootstrapAddress;
 
   @Bean
-  public ReactiveKafkaProducerTemplate<String, CreditPayedEvent> reactivePaymentEventKafkaTemplate() {
+  public ReactiveKafkaProducerTemplate<String, CreditPayedEvent>
+      reactivePaymentEventKafkaTemplate() {
     Map<String, Object> props = new HashMap<>();
     props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
     props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);

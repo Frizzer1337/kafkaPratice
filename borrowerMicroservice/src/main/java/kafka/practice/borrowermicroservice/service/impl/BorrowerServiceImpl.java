@@ -15,6 +15,7 @@ public class BorrowerServiceImpl implements BorrowerService {
     this.borrowerRepository = borrowerRepository;
   }
 
+  @Override
   public Mono<Boolean> register(Borrower borrower) {
     return borrowerRepository.save(borrower);
   }
