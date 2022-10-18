@@ -25,10 +25,6 @@ public class CollectorServiceImpl {
     this.collectorRepository = collectorRepository;
   }
 
-  public Mono<Boolean> save(CollectorCredit collectorCredit) {
-    return collectorCreditRepository.save(collectorCredit);
-  }
-
   public Mono<Boolean> save(Collector collector) {
     return collectorRepository.save(collector);
   }

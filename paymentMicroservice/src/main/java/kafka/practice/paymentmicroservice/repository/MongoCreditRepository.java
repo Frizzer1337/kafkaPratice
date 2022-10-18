@@ -14,8 +14,7 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.lt;
+import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Updates.inc;
 import static com.mongodb.client.model.Updates.set;
 
@@ -34,8 +33,18 @@ public class MongoCreditRepository implements CreditRepository {
             eq("_id", payment.getCreditId()),
             Updates.combine(
                 inc("creditBalance", -1 * payment.getPayment()),
+                inc("penalty", -1 * payment.getPayment()),
                 set("lastPaymentDate", LocalDateTime.now().toString())),
             new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER)));
+  }
+
+  @Override
+  public Mono<Boolean> checkIfCreditPayed(Credit credit) {
+    return Mono.from(
+            collection.findOneAndUpdate(
+                lte("creditBalance", 0), set("creditStatus", "CREDIT_PAYED")))
+        .map(x -> true)
+        .defaultIfEmpty(false);
   }
 
   @Override
@@ -43,7 +52,7 @@ public class MongoCreditRepository implements CreditRepository {
     return Mono.from(
             collection.updateMany(
                 lt("lastPaymentDate", LocalDateTime.now().minusDays(1).toString()),
-                inc("penalty", 50)))
+                Updates.combine(inc("penalty", 50), inc("creditBalance", 50))))
         .map(x -> true)
         .defaultIfEmpty(false);
   }
@@ -64,8 +73,7 @@ public class MongoCreditRepository implements CreditRepository {
                                     "$divide", Arrays.asList("$penalty", "$creditBalance")),
                                 0.5d))),
                     new Document(
-                        "$expr",
-                        new Document("$eq", Arrays.asList("$creditStatus", "APPROVED"))))),
+                        "$expr", new Document("$eq", Arrays.asList("$creditStatus", "APPROVED"))))),
             Arrays.asList(new Document("$set", new Document("creditStatus", "NEED_COLLECTOR")))));
   }
 

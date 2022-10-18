@@ -10,6 +10,8 @@ public interface CreditRepository {
 
     Mono<Credit> pay(Payment payment);
 
+    Mono<Boolean> checkIfCreditPayed(Credit credit);
+
     Mono<Boolean> sendPenalty();
 
     Flux<UpdateResult> checkCreditToSendCollector();

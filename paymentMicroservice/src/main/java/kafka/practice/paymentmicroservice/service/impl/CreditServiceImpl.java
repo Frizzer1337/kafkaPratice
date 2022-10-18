@@ -1,9 +1,6 @@
 package kafka.practice.paymentmicroservice.service.impl;
 
-import kafka.practice.api.entity.CollectorCredit;
-import kafka.practice.api.entity.CollectorEvent;
-import kafka.practice.api.entity.Payment;
-import kafka.practice.api.entity.PaymentEvent;
+import kafka.practice.api.entity.*;
 import kafka.practice.paymentmicroservice.repository.CreditRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +20,7 @@ public class CreditServiceImpl {
   private CollectorServiceImpl collectorService;
   private ReactiveKafkaProducerTemplate<String, PaymentEvent> kafkaTemplate;
   private ReactiveKafkaProducerTemplate<String, CollectorEvent> kafkaCollectorTemplate;
+  private ReactiveKafkaProducerTemplate<String, CreditPayedEvent> kafkaCreditPayedTemplate;
   private final Logger log = LoggerFactory.getLogger(CreditServiceImpl.class);
 
   @Autowired
@@ -31,12 +29,14 @@ public class CreditServiceImpl {
       PaymentServiceImpl paymentService,
       CollectorServiceImpl collectorService,
       ReactiveKafkaProducerTemplate<String, PaymentEvent> kafkaTemplate,
-      ReactiveKafkaProducerTemplate<String, CollectorEvent> kafkaCollectorTemplate) {
+      ReactiveKafkaProducerTemplate<String, CollectorEvent> kafkaCollectorTemplate,
+      ReactiveKafkaProducerTemplate<String, CreditPayedEvent> kafkaCreditPayedTemplate) {
     this.creditRepository = creditRepository;
     this.paymentService = paymentService;
     this.collectorService = collectorService;
     this.kafkaTemplate = kafkaTemplate;
     this.kafkaCollectorTemplate = kafkaCollectorTemplate;
+    this.kafkaCreditPayedTemplate = kafkaCreditPayedTemplate;
   }
 
   public Mono<Boolean> pay(Payment payment) {
@@ -44,11 +44,30 @@ public class CreditServiceImpl {
         .pay(payment)
         .flatMap(
             x ->
-                kafkaTemplate
-                    .send("CREDIT_PAYMENT", new PaymentEvent(x))
-                    .doOnSuccess(
-                        result ->
-                            log.info("sent {} offset: {}", x, result.recordMetadata().offset())))
+                creditRepository
+                    .checkIfCreditPayed(x)
+                    .flatMap(
+                        creditPayed -> {
+                          if (creditPayed) {
+                            return kafkaCreditPayedTemplate
+                                .send("CREDIT_PAYED", new CreditPayedEvent(x))
+                                .doOnSuccess(
+                                    result ->
+                                        log.info(
+                                            "sent {} offset: {}",
+                                            x,
+                                            result.recordMetadata().offset()));
+                          } else {
+                            return kafkaTemplate
+                                .send("CREDIT_PAYMENT", new PaymentEvent(x))
+                                .doOnSuccess(
+                                    result ->
+                                        log.info(
+                                            "sent {} offset: {}",
+                                            x,
+                                            result.recordMetadata().offset()));
+                          }
+                        }))
         .map(it -> true)
         .defaultIfEmpty(false);
   }

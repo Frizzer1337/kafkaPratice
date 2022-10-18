@@ -1,9 +1,6 @@
 package kafka.practice.notificationmicroservice.service;
 
-import kafka.practice.api.entity.CollectorEvent;
-import kafka.practice.api.entity.Credit;
-import kafka.practice.api.entity.CreditCheckEvent;
-import kafka.practice.api.entity.PaymentEvent;
+import kafka.practice.api.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
@@ -20,16 +17,19 @@ public class NotificationService {
   private KafkaReceiver<String, CreditCheckEvent> kafkaEventConsumer;
   private KafkaReceiver<String, PaymentEvent> kafkaPaymentEventConsumer;
   private KafkaReceiver<String, CollectorEvent> kafkaCollectorEventConsumer;
+  private KafkaReceiver<String, CreditPayedEvent> kafkaPayedEventConsumer;
 
   public NotificationService(
       KafkaReceiver<String, Credit> kafkaConsumer,
       KafkaReceiver<String, CreditCheckEvent> kafkaEventConsumer,
       KafkaReceiver<String, PaymentEvent> kafkaPaymentEventConsumer,
-      KafkaReceiver<String, CollectorEvent> kafkaCollectorEventConsumer) {
+      KafkaReceiver<String, CollectorEvent> kafkaCollectorEventConsumer,
+      KafkaReceiver<String, CreditPayedEvent> kafkaPayedEventConsumer) {
     this.kafkaConsumer = kafkaConsumer;
     this.kafkaEventConsumer = kafkaEventConsumer;
     this.kafkaPaymentEventConsumer = kafkaPaymentEventConsumer;
     this.kafkaCollectorEventConsumer = kafkaCollectorEventConsumer;
+    this.kafkaPayedEventConsumer = kafkaPayedEventConsumer;
   }
 
   @EventListener(ApplicationStartedEvent.class)
@@ -72,6 +72,19 @@ public class NotificationService {
             x ->
                 log.info(
                     "Credit was send to collectors {} offset: {}",
+                    x.value().getClass(),
+                    x.offset()))
+        .then(Mono.empty());
+  }
+
+  @EventListener(ApplicationStartedEvent.class)
+  public Mono<Void> kafkaCreditPayed() {
+    return kafkaPayedEventConsumer
+        .receive()
+        .doOnNext(
+            x ->
+                log.info(
+                    "Credit {} was payed  offset: {}",
                     x.value().getClass(),
                     x.offset()))
         .then(Mono.empty());
