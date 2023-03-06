@@ -3,7 +3,7 @@
 
 ### Стек технологий/Used technologies:<br />
 * Java 17<br />
-* Kafka(reactor),<br />
+* Kafka(reactive),<br />
 * Reactor,<br />
 * MongoDB(reactivestreams),<br />
 * Docker(for Kafka),<br />
